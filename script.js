@@ -1,36 +1,39 @@
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let products = JSON.parse(localStorage.getItem("products")) || [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { 
+    getAuth, 
+    signInWithEmailAndPassword 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import { 
+    getFirestore, 
+    collection, 
+    getDocs, 
+    addDoc 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ---------------- FIREBASE CONFIG ---------------- */
+
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 /* ---------------- CART SYSTEM ---------------- */
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function addToCart(name, price) {
     cart.push({ name, price });
     localStorage.setItem("cart", JSON.stringify(cart));
     alert(name + " added to cart!");
-}
-
-function loadCart() {
-    let cartBox = document.getElementById("cart-items");
-    let totalBox = document.getElementById("total");
-
-    if (!cartBox) return;
-
-    cartBox.innerHTML = "";
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        total += item.price;
-
-        cartBox.innerHTML += `
-            <div class="cart-item">
-                <h3>${item.name}</h3>
-                <p>MWK ${item.price}</p>
-                <button onclick="removeItem(${index})">Remove</button>
-            </div>
-        `;
-    });
-
-    totalBox.innerText = "Total: MWK " + total;
 }
 
 function removeItem(index) {
@@ -39,58 +42,65 @@ function removeItem(index) {
     loadCart();
 }
 
-/* ---------------- ADMIN PANEL ---------------- */
+/* ---------------- ADMIN - ADD PRODUCT (FIREBASE) ---------------- */
 
-function addProduct() {
+async function addProduct() {
     let name = document.getElementById("name").value;
     let price = document.getElementById("price").value;
-
-    let image = prompt("Enter image URL:");
+    let image = prompt("Image URL:");
 
     if (!name || !price) {
         alert("Fill all fields");
         return;
     }
 
-    products.push({ name, price, image });
-    localStorage.setItem("products", JSON.stringify(products));
+    await addDoc(collection(db, "products"), {
+        name: name,
+        price: Number(price),
+        image: image
+    });
+
+    alert("Product added successfully!");
 
     loadProducts();
+    loadHomeProducts();
 }
 
-function loadProducts() {
-    let list = document.getElementById("product-list");
+/* ---------------- LOAD PRODUCTS (ADMIN) ---------------- */
 
+async function loadProducts() {
+    let list = document.getElementById("product-list");
     if (!list) return;
+
+    const querySnapshot = await getDocs(collection(db, "products"));
 
     list.innerHTML = "";
 
-    products.forEach((p, index) => {
+    querySnapshot.forEach((doc) => {
+        let p = doc.data();
+
         list.innerHTML += `
             <div class="cart-item">
                 <h3>${p.name}</h3>
                 <p>MWK ${p.price}</p>
-                <button onclick="deleteProduct(${index})">Delete</button>
             </div>
         `;
     });
 }
 
-function deleteProduct(index) {
-    products.splice(index, 1);
-    localStorage.setItem("products", JSON.stringify(products));
-    loadProducts();
-}
+/* ---------------- LOAD PRODUCTS (HOME PAGE) ---------------- */
 
-function loadHomeProducts() {
+async function loadHomeProducts() {
     let box = document.getElementById("product-box");
     if (!box) return;
 
-    let products = JSON.parse(localStorage.getItem("products")) || [];
+    const querySnapshot = await getDocs(collection(db, "products"));
 
     box.innerHTML = "";
 
-    products.forEach((p) => {
+    querySnapshot.forEach((doc) => {
+        let p = doc.data();
+
         box.innerHTML += `
             <div class="product">
                 <img src="${p.image}" width="100%" height="180">
@@ -104,62 +114,31 @@ function loadHomeProducts() {
     });
 }
 
-loadHomeProducts();
-
-function placeOrder() {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    if (cart.length === 0) {
-        alert("Cart is empty!");
-        return;
-    }
-
-    let message = "Hello AKC ONLINE SHOP, I want to order:%0A";
-
-    let total = 0;
-
-    cart.forEach(item => {
-        message += `- ${item.name} MWK ${item.price}%0A`;
-        total += item.price;
-    });
-
-    message += `%0ATotal: MWK ${total}`;
-
-    let phone = "265XXXXXXXXX"; // CHANGE THIS
-
-    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
-}
+/* ---------------- LOGIN SYSTEM ---------------- */
 
 function login() {
-    let user = document.getElementById("user").value;
-    let pass = document.getElementById("pass").value;
-    let msg = document.getElementById("msg");
+    let email = document.getElementById("user").value;
+    let password = document.getElementById("pass").value;
 
-    if (user === "admin" && pass === "1234") {
-        msg.innerHTML = "Login successful!";
-        msg.style.color = "green";
-        localStorage.setItem("loggedIn", "true");
-        setTimeout(() => {
+    signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+            alert("Login successful");
             window.location.href = "admin.html";
-        }, 1000);
-    } else {
-        msg.innerHTML = "Wrong username or password";
-        msg.style.color = "red";
-    }
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
 }
 
-function sendMessage(event) {
-    event.preventDefault();
+/* ---------------- INIT ---------------- */
 
-    let name = document.getElementById("name").value;
-    let email = document.getElementById("email").value;
-    let message = document.getElementById("message").value;
+loadHomeProducts();
 
-    alert("Thank you " + name + "! Your message has been sent.");
+/* ---------------- MAKE FUNCTIONS WORK IN HTML ---------------- */
 
-    console.log({
-        name,
-        email,
-        message
-    });
-}
+window.addProduct = addProduct;
+window.loadProducts = loadProducts;
+window.loadHomeProducts = loadHomeProducts;
+window.addToCart = addToCart;
+window.removeItem = removeItem;
+window.login = login;

@@ -16,7 +16,7 @@
     <div class="login-box">
         <h1>Login</h1>
 
-        <input type="text" id="user" placeholder="Username">
+        <input type="email" id="user" placeholder="Email">
         <input type="password" id="pass" placeholder="Password">
 
         <button onclick="login()">Login</button>
@@ -26,7 +26,17 @@
 
 </section>
 
-<script src="script.js"></script>
+<!-- IMPORTANT: module script -->
+<script type="module" src="script.js"></script>
+
+<!-- FIX: expose function to HTML -->
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        if (typeof login === "function") {
+            window.login = login;
+        }
+    });
+</script>
 
 </body>
 </html>
