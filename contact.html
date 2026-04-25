@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - AKC ONLINE SHOP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">AKC ONLINE SHOP</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="login.html">Login</a>
+        <a href="cart.html">Cart</a>
+    </nav>
+</header>
+
+<section class="contact">
+    <h1>Contact Us</h1>
+
+    <p>We are here to help you. Reach us anytime using the form below or WhatsApp.</p>
+
+    <form onsubmit="sendMessage(event)">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <textarea id="message" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+
+    <div class="whatsapp-contact">
+        <a href="https://wa.me/265885897183" target="_blank">
+            Chat on WhatsApp
+        </a>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 AKC ONLINE SHOP — All Rights Reserved</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

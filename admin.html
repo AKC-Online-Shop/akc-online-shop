@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - AKC ONLINE SHOP</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- SECURITY CHECK (VERY IMPORTANT) -->
+    <script>
+        if (localStorage.getItem("loggedIn") !== "true") {
+            alert("Access denied. Login first.");
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+
+<body onload="loadProducts()">
+
+<header>
+    <div class="logo">ADMIN PANEL</div>
+</header>
+
+<section class="admin">
+    <h1>Add New Product</h1>
+
+    <input type="text" id="name" placeholder="Product Name">
+    <input type="number" id="price" placeholder="Price (MWK)">
+    <button onclick="addProduct()">Add Product</button>
+
+    <h2>Products List</h2>
+    <div id="product-list"></div>
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>

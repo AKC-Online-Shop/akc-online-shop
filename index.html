@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKC ONLINE SHOP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">AKC ONLINE SHOP</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="#">Products</a>
+        <a href="login.html">Login</a>
+        <a href="cart.html">Cart</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <h1>Welcome to AKC ONLINE SHOP</h1>
+    <p>Your Trusted Plug for Clothes, Shoes, Electronics & More</p>
+    <button onclick="location.href='#products'">Shop Now</button>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories">
+    <h2>Shop By Category</h2>
+
+    <div class="category-box">
+        <div class="card">
+            <h3>Fashion Clothes</h3>
+            <p>Latest designer outfits</p>
+        </div>
+
+        <div class="card">
+            <h3>Luxury Shoes</h3>
+            <p>Men & Women collections</p>
+        </div>
+
+        <div class="card">
+            <h3>Smart Electronics</h3>
+            <p>Phones, laptops & gadgets</p>
+        </div>
+    </div>
+</section>
+
+<!-- DYNAMIC PRODUCTS SECTION -->
+<section class="featured" id="products">
+    <h2>Featured Products</h2>
+
+    <!-- THIS IS NOW DYNAMIC (FROM ADMIN PANEL) -->
+    <div id="product-box" class="product-box"></div>
+</section>
+
+<!-- WHATSAPP ORDER BUTTON -->
+<div class="whatsapp">
+    <a href="https://wa.me/265885897183" target="_blank">
+        Order on WhatsApp
+    </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 AKC ONLINE SHOP — All Rights Reserved</p>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script src="script.js"></script>
+
+</body>
+</html>
