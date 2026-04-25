@@ -14,13 +14,15 @@ import {
 /* ---------------- FIREBASE CONFIG ---------------- */
 
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "YOUR_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAlhN1YeRn0bLFFzRr1oaOScrW7EDYSHkU",
+  authDomain: "akc-online-shop.firebaseapp.com",
+  projectId: "akc-online-shop",
+  storageBucket: "akc-online-shop.appspot.com",
+  messagingSenderId: "357295977490",
+  appId: "1:357295977490:web:8006a120a9976818d1d4cb"
 };
+
+/* ---------------- INIT FIREBASE ---------------- */
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -42,7 +44,7 @@ function removeItem(index) {
     loadCart();
 }
 
-/* ---------------- ADMIN - ADD PRODUCT (FIREBASE) ---------------- */
+/* ---------------- ADMIN - ADD PRODUCT ---------------- */
 
 async function addProduct() {
     let name = document.getElementById("name").value;
@@ -66,7 +68,7 @@ async function addProduct() {
     loadHomeProducts();
 }
 
-/* ---------------- LOAD PRODUCTS (ADMIN) ---------------- */
+/* ---------------- LOAD ADMIN PRODUCTS ---------------- */
 
 async function loadProducts() {
     let list = document.getElementById("product-list");
@@ -88,7 +90,7 @@ async function loadProducts() {
     });
 }
 
-/* ---------------- LOAD PRODUCTS (HOME PAGE) ---------------- */
+/* ---------------- LOAD HOME PRODUCTS ---------------- */
 
 async function loadHomeProducts() {
     let box = document.getElementById("product-box");
@@ -121,11 +123,19 @@ function login() {
     let password = document.getElementById("pass").value;
 
     signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-            alert("Login successful");
-            window.location.href = "admin.html";
+        .then((userCredential) => {
+
+            console.log("User ID:", userCredential.user.uid);
+
+            alert("Login successful!");
+
+            setTimeout(() => {
+                window.location.href = "admin.html";
+            }, 500);
+
         })
         .catch((error) => {
+            console.log(error.code);
             alert(error.message);
         });
 }
@@ -134,7 +144,7 @@ function login() {
 
 loadHomeProducts();
 
-/* ---------------- MAKE FUNCTIONS WORK IN HTML ---------------- */
+/* ---------------- EXPOSE FUNCTIONS TO HTML ---------------- */
 
 window.addProduct = addProduct;
 window.loadProducts = loadProducts;
